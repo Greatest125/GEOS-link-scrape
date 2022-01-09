@@ -8,6 +8,8 @@ Links are genererated from GA EPD's GEOS portal ([see this](https://geos.epd.geo
 
 1.  Run mybot.py (python3 mybot.py) → should create a list of links (need to run on a Windows PC with Visual Studio Code?)
 
+Note: you might need to download and run the [lastest Chromedriver] (https://chromedriver.chromium.org/downloads) 
+
 1.  Ask more reports are added to GEOS, there will be more than the 137 pages of tonnage reports that exist in Dec. 2021
 
 2.  Therefore, before running mybot.py, open the script in your text editor and replace 137 in "pagelimit = 137" with the total number of pages. 
