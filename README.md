@@ -4,6 +4,10 @@ This python script was written to create a list of links for all of the Solid Wa
 
 Links are genererated from GA EPD's GEOS portal ([see this](https://geos.epd.georgia.gov/GA/GEOS/Public/Client/GA_GEOS/Public/Pages/PublicApplicationList.aspx))
 
+The main script can be be adapted to download other reports from GEOS. For more information, [contact us](mailto:leel@duck.com?subject=GEOS%20link%20scraper). 
+
+*The development of this script was funded by the [Energy Justice Network](energyjustice.net)*
+
 ## To download all quarterly reports from GEOS
 
 1.  Run mybot.py (python3 mybot.py) → should create a list of links (need to run on a Windows PC with Visual Studio Code?)
