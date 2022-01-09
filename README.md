@@ -6,7 +6,7 @@ Links are genererated from GA EPD's GEOS portal ([see this](https://geos.epd.geo
 
 The main script can be be adapted to download other reports from GEOS. For more information, [contact us](mailto:leel@duck.com?subject=GEOS%20link%20scraper). 
 
-*The development of this script was funded by the [Energy Justice Network](energyjustice.net)*
+*The development of this script was funded by the [Energy Justice Network](energyjustice.net).*
 
 ## To download all quarterly reports from GEOS
 
