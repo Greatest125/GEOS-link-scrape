@@ -21,7 +21,7 @@ import urllib.parse
 #>>>>>>>>>>>>>>>>>>>>> here you asign the starting and the ending page <<<<<<<<<<<<<<<<<<<<<<<
 startPage = 1 #from
 pagelimit = 137 #till
-#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
+#>>>>>>>>>>>>>>>>>>>>> these values might need to be tweaked in the future >>>>>>>>>>>>>>>>>>>
 
 
 
