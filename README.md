@@ -10,19 +10,13 @@ The main script can be be adapted to download other reports from GEOS. For more 
 
 ## To download all quarterly reports from GEOS
 
-1.  Run mybot.py (python3 mybot.py) → should create a list of links (need to run on a Windows PC with Visual Studio Code?)
-
 Note: you might need to download and run the [lastest Chromedriver](https://chromedriver.chromium.org/downloads)
 
-1.  Ask more reports are added to GEOS, there will be more than the 137 pages of tonnage reports that exist in Dec. 2021
+1.  Run mybot.py (python3 mybot.py)
 
-2.  Therefore, before running mybot.py, open the script in your text editor and replace 137 in "pagelimit = 137" with the total number of pages. 
+2.  This should create a "files" folder with a set of PDF tonnage reports as well as copies with the *.old extension that are the original downloads with proper EOF marks inserted.  (Previous version separated out this download step, but that is not accomplished during file identification.) This should also create a list of links (pdf_links.csv) to each original PDF report.
 
-3.  Rename the list of links "links.csv" and create a folder in your Downloads directory titled "files"
-
-4.  Run downloadlinks.py (python3 downloadlinks.py) in the same directory as links.csv
-
-5.  In the "files" folder you should have all tonnage reports downloaded from the GEOS database
+3.  As more reports are added to GEOS, there will be more than the 80 pages of tonnage reports that exist in Dec. 2021. Before running mybot.py, open the script in your text editor and replace 80 in "pagelimit" with the total number of pages found at the base URL (see steps below)
 
 ## How to determine the total number of pages of SW tonnage reports in GEOS
 
