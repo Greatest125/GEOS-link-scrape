@@ -2,7 +2,7 @@
 A python script to scrape links for from Georgia EPD's GEOS database
 This python script was written to create a list of links for all of the Solid Waste Disposal and Recycling Report for all solid waste facilities in Georgia.
 
-Links are genererated from GA EPD's GEOS portal ([see this](https://geos.epd.georgia.gov/GA/GEOS/Public/Client/GA_GEOS/Public/Pages/PublicApplicationList.aspx))
+Links are generated from GA EPD's GEOS portal ([see this](https://geos.epd.georgia.gov/GA/GEOS/Public/Client/GA_GEOS/Public/Pages/PublicApplicationList.aspx))
 
 The main script can be be adapted to download other reports from GEOS. For more information, [contact us](mailto:leel@duck.com?subject=GEOS%20link%20scraper). 
 
