@@ -1,49 +1,102 @@
 import os.path
-from os import path
+#from os import path
 import time
 from bs4 import BeautifulSoup
-import requests
-import re
+#import requests
+#import re
 import csv
 import urllib.request
-from datetime import date
+#from datetime import date
 from selenium import webdriver
-from selenium.webdriver.support.ui import WebDriverWait
+#from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.support.ui import Select
-from random import randint
-import subprocess
+#from random import randint
+#import subprocess
 import http.client
 import urllib.parse
+#import ssl
+from pikepdf import Pdf
+
+"""
+This code downloads landfill reports from the noted website, cleans them, while retaining a URL to the file in pdf_links.csv.
+The code can be changed to reflect a different site and different button clicks to get to the filtered files desired.
+The code requires a copy of chromedriver.exe, and everything runs within one folder.
+"""
 
 #>>>>>>>>>>>>>>>>>>>>> here you asign the starting and the ending page <<<<<<<<<<<<<<<<<<<<<<<
 startPage = 1 #from
-pagelimit = 137 #till
-#>>>>>>>>>>>>>>>>>>>>> these values might need to be tweaked in the future >>>>>>>>>>>>>>>>>>>
-
-
-
-
+pagelimit =80 #till (check this occassionally to confirm a reasonable maximum to save time)
+#>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
 
 baseurl = "https://geos.epd.georgia.gov"
+filesDir = "files/"
 pagecount = 2
 fileheader = 0
 failureheader = 0
+skippingprevious = True
 
+def fixPDF(filename):
+  
+  print ("Fixing: ", filename)
+  
+  file_basename = filename[:-4]
+  original_input_file_path = filename
+  new_output_file_path = file_basename+".pdf"
+  final_input_file_path = file_basename+".old"
 
-def writerow(docLink, fileName, currentPage):
+  #print ("Original Input File Path:",original_input_file_path)
+  #print ("New Output File Path:",new_output_file_path)
+  #print ("Final Input File Path:",final_input_file_path)
+  
+  os.rename(original_input_file_path, final_input_file_path)
+  
+  pdf = Pdf.open(final_input_file_path)
+  new_pdf = Pdf.new()
+  for page_obj in pdf.pages:
+      new_pdf.pages.append(page_obj)
+  new_pdf.save(new_output_file_path)
+
+  #os.rename(original_input_file_path, final_input_file_path)
+  #os.rename(tmp_output_file_path, original_input_file_path)
+  print("Fixed: ",filename)
+  return
+
+def getPDF(docLink, fileName):
+  global filesDir
+  url = docLink
+  title = fileName
+  if "https" in url:
+    splitUrl = url
+    splitUrl = splitUrl.split("=")
+    formid=splitUrl[len(splitUrl)-2].replace("&type","")
+    filename = filesDir + title.replace("/","_") + "_" + formid + ".pdf"
+    if skippingprevious and not os.path.isfile(filename):
+        print("downloading ID = " + formid)
+        try:
+            urllib.request.urlretrieve(url, filename)
+            fixPDF(filename)
+  
+        except Exception as inst:
+            print (inst)
+            print ("error downloading")
+    else:
+        print ("skipping ID = " + formid)
+  return
+            
+def writerow(docLink, fileName):
   global fileheader
   with open ('pdf_links.csv', 'a', newline='', encoding='utf-8') as f:
-    fieldnames = ['Document Link', 'title', 'page#']
+    fieldnames = ['Document Link', 'title']
     # fieldnames = ['Document Link']
     thewriter = csv.DictWriter(f, fieldnames = fieldnames) 
     if (fileheader ==  0 ):
       thewriter.writeheader()
       fileheader = fileheader+1
       print("running file if")
-    thewriter.writerow({'Document Link':docLink, 'title':fileName, 'page#':currentPage})
+    thewriter.writerow({'Document Link':docLink, 'title':fileName})
     # thewriter.writerow({'Document Link':docLink})
   return
 
@@ -121,19 +174,19 @@ def extractpage(driver):
   viewstate = ""
   viewstate = urllib.parse.quote(html.find("input", id='__VIEWSTATE').get("value"), safe="")
   # print(viewstate)
-  print(len(tds))
+  #print(len(tds))
   for x in range(0, len(tds)):
     button_name = urllib.parse.quote(tds[x].get("name"), safe="")
     try:
       fileName = tds[x].find_next("td").text.strip()
     except:
       fileName = "file name not found or Empty"
-    print(currentPage)
-    setFristCall(button_name, viewstate, fileName, currentPage)
+    print("Reading Page: ",currentPage)
+    setFirstCall(button_name, viewstate, fileName, currentPage)
   goNext(driver)
 
-def setFristCall(button_name, viewstate, fileName, currentPage):
-  print(button_name)
+def setFirstCall(button_name, viewstate, fileName, currentPage):
+  #print(button_name)
   conn = http.client.HTTPSConnection("geos.epd.georgia.gov")
   payload = 'SimpleMainContent_MainContent_tabView_IDX=0&__ASYNCPOST=true&__EVENTARGUMENT=&__EVENTTARGET=&__LASTFOCUS=&__VIEWSTATE='+viewstate+'&__VIEWSTATEGENERATOR=55AD252D&ctl00%24ctl00%24ScriptManager1=ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24UpdatePanel2%7C'+button_name+'&'+button_name+'.x=17&'+button_name+'.y=6&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24ddlApplication=2148&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24ddlApplicationType=10036&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24ddlCategory=1&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24ddlProgram=3&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24ddlSiteCounty=&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24ddlSubmissionStatus=&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24txtEndDate=&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24txtFacilityName=&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24txtPermitNumber=&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24txtSiteAddress1=&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24txtSiteCity=&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24txtStartDate=&ctl00%24ctl00%24SimpleMainContent%24MainContent%24ucApplicationSubmitList%24txtSubmissionId=&ctl00%24ctl00%24footerContent%24Footer1%24ctl00%24PopupPanel1eftPopPanlHF=false&ctl00%24ctl00%24footerContent%24Footer1%24ctl00%24pnleftPopPanlHF=false&ctl00%24ctl00%24sDateFormat=&hiddenInputToUpdateATBuffer_CommonToolkitScripts=1'
   headers = {
@@ -189,9 +242,10 @@ def setFristCall(button_name, viewstate, fileName, currentPage):
     button_name = ""
     docLink = baseurl+formId.replace("javascript:jsPopWin'", "").replace("';","")
   except:
-    docLink="The File is not avialable for this record"
+    docLink="The File is not available for this record"
   print(docLink)
-  writerow(docLink, fileName, currentPage)
+  writerow(docLink, fileName)
+  getPDF(docLink, fileName)
 
 def filterSelections():
   chrome_options = webdriver.ChromeOptions()
@@ -223,9 +277,6 @@ def filterSelections():
   driver.find_element_by_id('SimpleMainContent_MainContent_ucApplicationSubmitList_btnSearch').click()
   waitTillLoader(driver)
   extractpage(driver)
-
-
-
 
 if __name__ == "__main__":
   filterSelections()
