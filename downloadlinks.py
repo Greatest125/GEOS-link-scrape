@@ -1,6 +1,10 @@
 import urllib.request
 import csv
 import os.path
+import os
+
+if not os.path.isdir("files"):
+    os.mkdir("files")
 
 with open('pdf_links.csv', encoding="utf8") as csvfile:
 	reader = csv.DictReader(csvfile)
