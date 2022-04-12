@@ -272,7 +272,7 @@ def filterSelections():
   waitTillLoader(driver)
 
   print(">>Fetching Reports<<")
-  driver.find_element_by_id('SimpleMainContent_MainContent_ucApplicationSubmitList_btnSearch').click()
+  driver.find_element(By.ID, 'SimpleMainContent_MainContent_ucApplicationSubmitList_btnSearch').click()
   waitTillLoader(driver)
   extractpage(driver)
 
