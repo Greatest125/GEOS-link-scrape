@@ -26,7 +26,7 @@ The code can be changed to reflect a different site and different button clicks 
 The code requires a copy of chromedriver.exe, and everything runs within one folder.
 """
 chromedriver_autoinstaller.install()  
-#>>>>>>>>>>>>>>>>>>>>> here you asign the starting and the ending page <<<<<<<<<<<<<<<<<<<<<<<
+#>>>>>>>>>>>>>>>>>>>>> here you assign the starting and the ending page <<<<<<<<<<<<<<<<<<<<<<<
 startPage = 1 #from
 pagelimit =80 #till (check this occassionally to confirm a reasonable maximum to save time)
 #>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>
